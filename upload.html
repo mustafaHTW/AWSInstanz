@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bild direkt nach S3 hochladen</title>
+</head>
+<body>
+  <h2>Bild hochladen</h2>
+  <input type="file" id="fileInput" />
+  <button onclick="upload()">Hochladen</button>
+
+  <script>
+    async function upload() {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) {
+        alert("Bitte Datei auswählen.");
+        return;
+      }
+
+      const filename = file.name;
+      const s3Url = `https://mustafaprojectbucket1.s3.eu-west-1.amazonaws.com/${filename}`;
+
+      const response = await fetch(s3Url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type
+        },
+        body: file
+      });
+
+      if (response.ok) {
+        alert("Upload erfolgreich!");
+      } else {
+        alert("Fehler beim Upload: " + response.statusText);
+      }
+    }
+  </script>
+</body>
+</html>
